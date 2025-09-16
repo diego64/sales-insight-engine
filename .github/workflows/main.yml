@@ -1,21 +1,21 @@
-name: CI - Fluxo de Análise
+name: Rodar Analise
 
 on:
   workflow_dispatch:
 
 jobs:
-  abertura-de-chamado:
+  run-analise-critico:
     runs-on: windows-latest
-
     steps:
-      - name: Checkout do repositório
+      - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Instalar Node.js 22
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '20'
 
-      - name: Executar análise com simulação de fluxo
+      - name: Executar analise.js com respostas automáticas
+        shell: bash
         run: |
-          echo "1\n1\n1\n6893\n5869\n6739\n6931\n127" | node analise.js
+          printf "1\n1\n1\n6893\n5869\n6739\n6931\n127\n" | node analise.js
