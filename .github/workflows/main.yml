@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  analise:
+  abertura-de-chamado:
     runs-on: windows-latest
 
     steps:
@@ -16,12 +16,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Executar análise com dados
-        env:
-          ATUAL: 6399
-          D1: 9401
-          W1: 5089
-          W4: 5690
-          PEDIDOS_PARADOS: 127
+      - name: Executar análise com simulação de fluxo
         run: |
-          node analise.js
+          echo "1\n1\n1\n6893\n5869\n6739\n6931\n127" | node analise.js
