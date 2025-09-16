@@ -16,11 +16,6 @@ function validarEntrada(resposta) {
   return isNaN(valor) ? null : valor;
 }
 
-function gerarBorda(linhas) {
-  const tamanhoMax = linhas.reduce((max, linha) => Math.max(max, linha.length), 0);
-  return "#".repeat(tamanhoMax + 4); // +4 para margem
-}
-
 // -------------------- Menu de seleção --------------------
 async function selecionarCategoria() {
   console.log("✒️  Selecione a categoria principal:");
@@ -91,29 +86,52 @@ function calcular() {
 function exibirRelatorio(selecao, resultado) {
   const { atual, pedidosParados, atualTotal, d1, w1, w4, percD1, percW1, percW4, mediaHistorica, variacao } = resultado;
 
-  const linhas = [
-    `📋 Categoria selecionada: ${selecao}`,
-    "",
-    `ATUAL: ${atual}`,
-    `D-1: ${d1} (${percD1}%)`,
-    `W-1: ${w1} (${percW1}%)`,
-    `W-4: ${w4} (${percW4}%)`,
-    `PEDIDOS PARADOS: ${pedidosParados}`,
-    `ATUAL + PEDIDOS PARADOS: ${atualTotal}`,
-    `Média Histórica (D-1, W-1, W-4): ${Math.round(mediaHistorica)}`,
-    "",
-    `📊 Variação Final: ${variacao}%`,
-    "",
-    variacao <= 15
-      ? "🚨 É NECESSÁRIO ABRIR UM INCIDENTE CRÍTICO PARA O TEMA"
-      : "✅ NÃO É NECESSÁRIO ABRIR UM INCIDENTE CRÍTICO"
+  // Cabeçalhos
+  const cabecalho = [
+    "PARAMETRO".padEnd(12),
+    "VALOR".padEnd(10),
+    "VARIAÇÃO (%)".padEnd(15),
+    "PEDIDOS PARADOS".padEnd(20),
+    "TOTAL (ATUAL + PARADOS)".padEnd(25),
   ];
 
-  const borda = gerarBorda(linhas);
+  // Linhas de dados
+  const linhas = [
+    ["ATUAL", atual, "", pedidosParados, atualTotal],
+    ["D-1", d1, `${percD1}%`, "", ""],
+    ["W-1", w1, `${percW1}%`, "", ""],
+    ["W-4", w4, `${percW4}%`, "", ""],
+  ];
 
-  console.log(borda);
-  linhas.forEach(linha => console.log(`  ${linha}`));
-  console.log(borda);
+  // Tabela
+  const separador = "-".repeat(90);
+  console.log(`\n📋 Categoria selecionada: ${selecao}\n`);
+  console.log(separador);
+  console.log(cabecalho.join(" | "));
+  console.log(separador);
+  linhas.forEach(linha => {
+    console.log(
+      linha[0].padEnd(12) + " | " +
+      String(linha[1]).padEnd(10) + " | " +
+      String(linha[2]).padEnd(15) + " | " +
+      String(linha[3]).padEnd(20) + " | " +
+      String(linha[4]).padEnd(25)
+    );
+  });
+  console.log(separador);
+
+  // Médias e resultado final
+  const mediaPorcentagem = Math.round((percD1 + percW1 + percW4) / 3);
+
+  console.log(`\nMÉDIA NUMÉRICA DOS PEDIDOS = ${Math.round(mediaHistorica)}`);
+  console.log(`MÉDIA EM PORCENTAGEM DOS PEDIDOS = ${mediaPorcentagem}%\n`);
+  console.log(`RESULTADO FINAL = ${variacao}%\n`);
+
+  if (variacao <= 15) {
+    console.log("🚨 É NECESSÁRIO ABRIR UM INCIDENTE CRÍTICO PARA O TEMA");
+  } else {
+    console.log("✅ NÃO É NECESSÁRIO ABRIR UM INCIDENTE CRÍTICO");
+  }
 }
 
 // -------------------- Fluxo principal --------------------
