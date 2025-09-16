@@ -1,17 +1,14 @@
 name: CI Analise
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   run-analise:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout código
+      - name: Checkout do código
         uses: actions/checkout@v4
 
       - name: Instalar Node.js 22
@@ -20,15 +17,18 @@ jobs:
           node-version: 22
 
       - name: Criar arquivo de respostas
+        shell: pwsh
         run: |
-          echo 1 > input.txt
-          echo 1 >> input.txt
-          echo 1 >> input.txt
-          echo 6893 >> input.txt
-          echo 5869 >> input.txt
-          echo 6739 >> input.txt
-          echo 6931 >> input.txt
-          echo 127 >> input.txt
+          "1" | Out-File input.txt -Encoding utf8
+          "1" | Out-File input.txt -Encoding utf8 -Append
+          "1" | Out-File input.txt -Encoding utf8 -Append
+          "6893" | Out-File input.txt -Encoding utf8 -Append
+          "5869" | Out-File input.txt -Encoding utf8 -Append
+          "6739" | Out-File input.txt -Encoding utf8 -Append
+          "6931" | Out-File input.txt -Encoding utf8 -Append
+          "127" | Out-File input.txt -Encoding utf8 -Append
 
-      - name: Executar analise.js com input
-        run: node analise.js < input.txt
+      - name: Executar analise.js com input automático
+        shell: pwsh
+        run: |
+          Get-Content input.txt | node analise.js
