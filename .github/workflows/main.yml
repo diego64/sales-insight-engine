@@ -1,21 +1,34 @@
-name: Rodar Analise
+name: CI Analise
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  run-analise-critico:
+  run-analise:
     runs-on: windows-latest
+
     steps:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Instalar Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 22
 
-      - name: Executar analise.js com respostas automáticas
-        shell: bash
+      - name: Criar arquivo de respostas
         run: |
-          printf "1\n1\n1\n6893\n5869\n6739\n6931\n127\n" | node analise.js
+          echo 1 > input.txt
+          echo 1 >> input.txt
+          echo 1 >> input.txt
+          echo 6893 >> input.txt
+          echo 5869 >> input.txt
+          echo 6739 >> input.txt
+          echo 6931 >> input.txt
+          echo 127 >> input.txt
+
+      - name: Executar analise.js com input
+        run: node analise.js < input.txt
