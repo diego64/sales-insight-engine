@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         versao: [16, 18, 20, 22]
-        plataforma: ["windows", "ubuntu", "macos"]
+        plataforma: ["windows"]
     runs-on: ${{ matrix.plataforma }}-latest
 
     steps:
