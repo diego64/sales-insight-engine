@@ -5,30 +5,22 @@ on:
 
 jobs:
   run-analise:
-    runs-on: windows-latest
+    name: Ambiente para execução
+    strategy:
+      matrix:
+        versao: [16, 18, 20, 22]
+        plataforma: ["windows", "ubuntu", "macos"]
+    runs-on: ${{ matrix.plataforma }}-latest
 
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Instalar Node.js 22
+      - name: Instalação do Node.Js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-
-      - name: Criar arquivo de respostas
-        shell: pwsh
+          node-version: ${{ matrix.versao }}
+      - name: Exibição da versão e da plataforma
         run: |
-          "1" | Out-File input.txt -Encoding utf8
-          "1" | Out-File input.txt -Encoding utf8 -Append
-          "1" | Out-File input.txt -Encoding utf8 -Append
-          "6893" | Out-File input.txt -Encoding utf8 -Append
-          "5869" | Out-File input.txt -Encoding utf8 -Append
-          "6739" | Out-File input.txt -Encoding utf8 -Append
-          "6931" | Out-File input.txt -Encoding utf8 -Append
-          "127" | Out-File input.txt -Encoding utf8 -Append
-
-      - name: Executar analise.js com input automático
-        shell: pwsh
-        run: |
-          Get-Content input.txt | node analise.js
+          node --version
+          echo ${{ runner.os }}
